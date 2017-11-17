@@ -25,7 +25,7 @@
                     <div th:if="${authentication}">
                         <h1 th:inline="text">Hello, [[${authentication.name}]]! (Groups: [[${authentication.authorities}]])</h1>
 
-                        <form sec:authorize="hasAuthority('upvoters')" th:action="@{/new_book}" th:object="${book}" method="post" class="form-inline">
+                        <form sec:authorize="hasAuthority('book_creators')" th:action="@{/new_book}" th:object="${book}" method="post" class="form-inline">
                             <div class="form-group">
                                 <label for="author">Author</label>
                                 <input type="text" th:field="*{author}" class="form-control" id="author" placeholder="Author"/>
