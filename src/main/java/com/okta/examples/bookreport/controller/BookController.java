@@ -2,6 +2,7 @@ package com.okta.examples.bookreport.controller;
 
 import com.okta.examples.bookreport.model.Book;
 import com.okta.examples.bookreport.repository.BookRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +38,7 @@ public class BookController {
         return "home";
     }
 
+    @PreAuthorize("hasAuthority('book_creators')")
     @RequestMapping(value = "/new_book", method = RequestMethod.POST)
     String newBook(@ModelAttribute Book book, Model model, OAuth2Authentication authentication) {
         book.setOwner(authentication.getName());
@@ -45,6 +47,7 @@ public class BookController {
         return home(model, authentication);
     }
 
+    @PreAuthorize("hasAuthority('upvoters')")
     @RequestMapping(value = "/upvote", method = RequestMethod.POST)
     String upvote(@ModelAttribute Book book, Model model, OAuth2Authentication authentication) {
         book = repository.findOne(book.getId());
