@@ -11,7 +11,7 @@ import javax.persistence.Id;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     String author;
     String title;
@@ -21,6 +21,10 @@ public class Book {
 
     public Book() {}
 
+    public Book(Integer id) {
+        this.id = id;
+    }
+
     public Book(String author, String title, String url, String owner) {
         this.author = author;
         this.title = title;
@@ -28,11 +32,11 @@ public class Book {
         this.owner = owner;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

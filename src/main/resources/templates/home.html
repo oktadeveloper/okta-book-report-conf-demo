@@ -72,7 +72,7 @@
                                         th:each="book : ${books}"
                                         th:with="canUpVote=${
                                             #authorization.expression('hasAuthority(''upvoters'')') and
-                                            not #lists.contains(myBooks, book)
+                                            not #lists.contains(myBookIds, book.id)
                                         }"
                                     >
                                         <td class="text-center" th:if="${canUpVote}">
