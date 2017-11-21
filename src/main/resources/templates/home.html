@@ -41,8 +41,8 @@
                             <button type="submit" class="btn btn-success">New Book</button>
                         </form>
 
-                        <form th:action="@{/logout}" method="post" class="nav">
-                            <input type="submit" class="btn btn-danger" value="Logout"/>
+                        <form th:action="@{/logout}" id="logout" method="post" class="nav">
+                            <a href="#" id="logout-proxy" class="btn btn-danger">Logout</a>
                         </form>
                     </div>
 
@@ -97,5 +97,19 @@
                 </div>
             </div>
         </div>
+        <script th:inline="javascript">
+            $('#logout-proxy').click(function () {
+                var oktaUrl = [[${oktaUrl}]];
+                oktaUrl += "/api/v1/sessions/me";
+                $.ajax({
+                    url: oktaUrl,
+                    type: 'DELETE',
+                    xhrFields: { withCredentials: true },
+                    success: function () {
+                        $('#logout').submit();
+                    }
+                });
+            })
+        </script>
     </body>
 </html>

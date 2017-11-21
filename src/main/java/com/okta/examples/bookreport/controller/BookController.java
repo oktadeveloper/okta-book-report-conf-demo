@@ -3,6 +3,7 @@ package com.okta.examples.bookreport.controller;
 import com.okta.examples.bookreport.model.Book;
 import com.okta.examples.bookreport.repository.BookRepository;
 import com.okta.examples.bookreport.service.BookService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class BookController {
+
+    @Value("#{ @environment['okta.oauth2.baseUrl'] }")
+    private String oktaUrl;
 
     private BookRepository repository;
     private BookService bookService;
@@ -29,6 +33,7 @@ public class BookController {
             model.addAttribute("myBookIds", bookService.getMyBookIds(authentication.getName()));
         }
 
+        model.addAttribute("oktaUrl", oktaUrl);
         model.addAttribute("authentication", authentication);
         model.addAttribute("books", repository.findAll());
         model.addAttribute("book", new Book());
