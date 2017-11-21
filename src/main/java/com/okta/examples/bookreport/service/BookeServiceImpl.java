@@ -1,10 +1,12 @@
 package com.okta.examples.bookreport.service;
 
+import com.okta.examples.bookreport.config.BooksConfig;
 import com.okta.examples.bookreport.model.Book;
 import com.okta.examples.bookreport.repository.BookRepository;
 import com.okta.sdk.client.Client;
 import com.okta.sdk.client.Clients;
 import com.okta.sdk.resource.user.User;
+import com.okta.sdk.resource.user.UserList;
 import com.okta.sdk.resource.user.UserProfile;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,19 @@ import java.util.stream.Collectors;
 @Service
 public class BookeServiceImpl implements BookService {
 
-    Client client;
+    private Client client;
+
     private BookRepository repository;
+    private BooksConfig booksConfig;
 
     @PostConstruct
     public void setup() {
         this.client = Clients.builder().build();
     }
 
-    public BookeServiceImpl(BookRepository repository) {
+    public BookeServiceImpl(BookRepository repository, BooksConfig booksConfig) {
         this.repository = repository;
+        this.booksConfig = booksConfig;
     }
 
     @Override
@@ -49,6 +54,22 @@ public class BookeServiceImpl implements BookService {
         upvotes.add(bookId);
         user.getProfile().put("upvotes", upvotes);
         user.update();
+    }
+
+    @Override
+    public void reset() {
+        // purge existing books
+        repository.deleteAll();
+
+        // load books from properties
+        repository.save(booksConfig.getBooks());
+
+        // reset all upvotes for all users
+        UserList users = client.listUsers();
+        for (User user : users) {
+            user.getProfile().put("upvotes", null);
+            user.update();
+        }
     }
 
     private User getUser(String username) {

@@ -6,4 +6,5 @@ public interface BookService {
 
     List<Integer> getMyBookIds(String username);
     void upvote(String username, Integer bookId);
+    void reset();
 }
