@@ -66,10 +66,10 @@ public class BookeServiceImpl implements BookService {
 
         // reset all upvotes for all users
         UserList users = client.listUsers();
-        for (User user : users) {
-            user.getProfile().put("upvotes", null);
+        users.forEach(user -> {
+            user.getProfile().put("upvotes", new ArrayList<Integer>());
             user.update();
-        }
+        });
     }
 
     private User getUser(String username) {
