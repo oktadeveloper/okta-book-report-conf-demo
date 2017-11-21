@@ -67,7 +67,7 @@ public class BookeServiceImpl implements BookService {
         // reset all upvotes for all users
         UserList users = client.listUsers();
         users.forEach(user -> {
-            user.getProfile().put("upvotes", new ArrayList<Integer>());
+            user.getProfile().remove("upvotes");
             user.update();
         });
     }
