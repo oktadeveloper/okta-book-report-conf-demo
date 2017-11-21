@@ -5,9 +5,12 @@ import com.okta.examples.bookreport.model.Book;
 import com.okta.examples.bookreport.repository.BookRepository;
 import com.okta.sdk.client.Client;
 import com.okta.sdk.client.Clients;
+import com.okta.sdk.resource.ResourceException;
 import com.okta.sdk.resource.user.User;
 import com.okta.sdk.resource.user.UserList;
 import com.okta.sdk.resource.user.UserProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +25,8 @@ public class BookeServiceImpl implements BookService {
 
     private BookRepository repository;
     private BooksConfig booksConfig;
+
+    private static final Logger log = LoggerFactory.getLogger(BookeServiceImpl.class);
 
     @PostConstruct
     public void setup() {
@@ -68,7 +73,11 @@ public class BookeServiceImpl implements BookService {
         UserList users = client.listUsers();
         users.forEach(user -> {
             user.getProfile().remove("upvotes");
-            user.update();
+            try {
+                user.update();
+            } catch (ResourceException e) {
+                log.error("Error updating: {}", e.getMessage(), e);
+            }
         });
     }
 
