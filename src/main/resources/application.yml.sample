@@ -21,17 +21,9 @@ logging:
     org.springframework.security: INFO
 okta:
   oauth2:
-    baseUrl: #your okta tenant
-    issuer: # full url to issuer for Authorization Server
-    audience: api://default # audience set in the Authorization server settings
-    clientId: # OIDC Client ID
-    clientSecret: # OIDC Client Secret
-    redirectUri: http://localhost:8080 # must be registered in the OIDC settings
-spring:
-  jpa:
-    hibernate:
-      ddl-auto: create
-  datasource:
-    url: jdbc:mysql://localhost:3306/<Your Database> # pre-set for MySQL, but any JPA DB can be used
-    username: # admin username for database
-    password: # admin password for database
+    baseUrl: https://{yourOktaDomain}.com # your Okta Organization
+    issuer: https://{yourOktaDomain}.com/oauth2/default # full url to Authorization Server
+    audience: api://default # audience set in the Authorization Server settings
+    clientId: # OIDC app Client ID
+    clientSecret: # OIDC app Client Secret
+    redirectUri: http://localhost:8080 # must be registered in the OIDC app settings
